@@ -1,27 +1,33 @@
 # Claude Coaching Prompt: The Best Practice Junkie
 
-This repository contains a system prompt designed to transform Claude into a proactive workflow coach for the human operator. 
+This repository contains a structured system designed to transform Claude into a proactive workflow coach for the human operator. 
 
 ## The Philosophy
-Inspired by the "Loop Engineering" philosophy championed by Anthropic engineers (specifically Boris Cherny, Head of Claude Code), this prompt shifts the dynamic between human and AI. 
+Inspired by the "Loop Engineering" philosophy championed by Anthropic engineers, this system shifts the dynamic between human and AI. Instead of the human prompting the AI, the goal is for the human to **build systems that prompt themselves (loops)**. 
 
-Instead of the human prompting the AI, the goal is for the human to **build systems that prompt themselves (loops)**. 
+To get there, the human needs coaching. This system ensures that Claude acts as a "Best Practice Junkie," constantly watching the operator's inputs and proactively suggesting more powerful workflows, automations, and loop designs.
 
-To get there, the human needs coaching. This system prompt ensures that Claude acts as a "Best Practice Junkie," constantly watching the operator's inputs and proactively suggesting more powerful workflows, automations, and loop designs.
+**The Paradigm Flip:** Claude is the DRIVER. The human is the APPROVER. Claude leads; the human decides.
 
-## The Mechanic
-Claude will use an inline asterisk (*) flag to interrupt the conversation whenever it spots an opportunity for a better practice:
+## The Architecture: Schema is Law
+Large Markdown instructions often get lost or forgotten by LLMs as context windows grow. To solve this, we use a **Structured Programming Format**.
 
-`* 💡 **COACHING MOMENT:** I can do this for you in a more powerful way.`
-`* 💡 **BEST PRACTICE:** There's a better practice here.`
+1. **`coaching-schema.json`**: This is the enforcement mechanism. It hard-codes 7 specific coaching triggers as pattern-match rules. Claude must validate every input against this schema.
+2. **`claude-coaching-instructions.md`**: This is a thin, human-readable wrapper (under 500 words) that instructs Claude to follow the schema.
 
-It will then offer the operator a choice: try the advanced approach, build the loop, or skip it and move on.
+If it matters enough to be a behavior, it gets a JSON schema. Markdown is just the documentation.
 
-## Files in this Repository
-1. **`claude-coaching-instructions.md`**: The core system prompt. Paste this into Claude's custom instructions, project instructions, or system prompt to activate the coaching behavior.
-2. **`transcript.md`**: The source material and context that inspired this approach, transcribed from an X/Twitter post by MIKE (@mikenevermiss) discussing Anthropic's internal workflows.
+## The 7 Coaching Triggers
+The schema watches for these specific failure modes:
+1. **The Goldfish Loop:** Repeating context (Coach: Build a SKILL.md)
+2. **The Manual Laborer:** Prompting single tasks in a recurring workflow (Coach: Build an Automation/Loop)
+3. **The Single-Threader:** Asking Claude to write AND review (Coach: Sub-Agent split)
+4. **The Context Loser:** Relying on chat history (Coach: Build a State/Memory file)
+5. **The Walled Garden:** Copy-pasting data (Coach: Use Connectors/MCP)
+6. **The App Builder:** Building from scratch in chat (Coach: URL-based Bootstrapping)
+7. **The Blind Coder:** Describing UI bugs in text (Coach: Visual Feedback Loop / Puppeteer)
 
-## How to Use
-1. Copy the contents of `claude-coaching-instructions.md`.
-2. Paste it into your AI assistant's system instructions (e.g., Claude Projects, Custom Instructions, or API System Prompt).
-3. Start working normally. Claude will now proactively coach you to stop writing prompts and start designing loops.
+## How to Use in Claude Projects
+1. Upload `coaching-schema.json` to your Claude Project's knowledge base / files.
+2. Copy the contents of `claude-coaching-instructions.md` and paste it into the Project's Custom Instructions.
+3. Start working. Claude will now proactively scan your inputs against the schema and coach you with inline `* 💡` flags when you slip into inefficient patterns.
